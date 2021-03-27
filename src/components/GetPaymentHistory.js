@@ -3,12 +3,12 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import { ClipLoader } from 'react-spinners'
 import 'react-toastify/dist/ReactToastify.css'
-import useToken from '../useToken'
+// import useToken from '../useToken'
 
  
 
 const GetPaymentHistory = () => {
-  const { token, setToken } = useToken()
+  // const { token, setToken } = useToken()
   const [id, setId] = useState()
   let [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
