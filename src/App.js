@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+
+import Header from './components/Header'
+import Dashboard from './components/Dashboard'
+import LoginForm from './components/LoginForm'
+import EditPaymentHistory from './components/EditPaymentHistory'
+import GetPaymentHistory from './components/GetPaymentHistory'
+import DeletePaymentHistory from './components/DeletePaymentHistory'
+import { ToastContainer } from 'react-toastify'
+import useToken from './useToken'
+
+
+import './App.css'
+
 
 function App() {
+  const { token, setToken } = useToken()
+
+  if (!token) {
+    return (
+      <div className='App'>
+        <LoginForm setToken={setToken} />
+      </div>
+    )
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Router>
+        <Header />
+        <Switch>
+          <Route exact path='/' component={Dashboard} />
+          <Route path='/get' component={GetPaymentHistory} />
+          <Route path='/edit' component={EditPaymentHistory} />
+          <Route path='/delete' component={DeletePaymentHistory} />
+
+          {/* <LoginForm /> */}
+        </Switch>
+      </Router>
+      <ToastContainer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
+
