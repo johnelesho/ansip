@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import axios from 'axios'
-// import setAuthorizationToken from "./setAuthorizationToken";
+import setAuthorizationToken from "./setAuthorizationToken";
 
-// setAuthorizationToken(localStorage.token)
+setAuthorizationToken(localStorage.token)
 axios.defaults.baseURL = `http://test.ansppb.an.gov.ng/api/`
 
 ReactDOM.render(

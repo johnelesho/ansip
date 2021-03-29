@@ -3,39 +3,65 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import { ClipLoader } from 'react-spinners'
 import 'react-toastify/dist/ReactToastify.css'
+import setAuthorizationToken from '../setAuthorizationToken'
+// import ReactTable from 'react-table'
+// import 'react-table/react-table.css'
+import { Link } from 'react-router-dom'
 // import useToken from '../useToken'
 
  
 
 const GetPaymentHistory = () => {
-  // const { token, setToken } = useToken()
+  // const { token } = useToken()
   const [id, setId] = useState()
   let [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
-
+  // const [columns, setColumns] = useState()
   const notify = (msg) => toast.error(`${msg}  Pls try again`)
 
-  axios.interceptors.request.use(
-    (config) => {
-      config.headers.authorization = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiYzI5YjhlYTczYjQyOWNhZGRkNzFhNTg5N2EwNDY4MzYzYWRjY2U4Y2Q0NWY4N2M2ZjI2ZGM3ODVmMTUxMzdlNTZmNjJlMzI5ZmYyNjFlY2EiLCJpYXQiOjE2MTY4NTAxNDMsIm5iZiI6MTYxNjg1MDE0MywiZXhwIjoxNjE2OTM2NTQzLCJzdWIiOiIxIiwic2NvcGVzIjpbIioiXX0.sy_7Ar_i4BDr7us66aUzm1aX62mPZXBNdE67UhyEVFo1EML11gyaR1XtsX1_b4JTTme5xBQiTNrGMDx-tjhG0JKPqlTbFux90VS69kPLMc6wuSq9SYIlPRDRVTZBLBBZmhqSLSqnEFnaQ6nk9jx3_G3YBTDrkWftDGNq6-Lh6dkuKn7TaSYmbXtaWQv7Btz74Xwm9tbZEbWj8iYZP25nnuTm8MTJ2Q9fqdC1qyE6Mai9hSsmspJEIHo5byTrydDSiKo7YRHXdyxWXH7WcgOyi3cfnWKakG9isEv2WmTrPOe-9v9hr0k4f0c-onfsbyITWrRhX9uCnYsw56KCd2oV-lV3R0COHGbaDK3rg4PzO4W-x8b1N0VwHgfrCC0kRBVaGf7QVfj_3M_GZpJQEi7TZz2A3E60gP4arTN39b6MevMDOGcF3LZVQq25MqanqN_VpTNQ3-cToLjMZ5mckH_DdDQ4L6Rm1jk8APGzIUuGu7xrbtHoy2ir0qy_cEL0TwWuXDkpteUhMx1y9i7UVRO8QXZyFy8SQ10AJbSoQ4STPB9d402MvM-Uq_bK530y4KamqNg2pdDhPXCKAxJaRHThVKgJXQM2i66sigl7cJcnckWZ53JyKFMxNVUj3YaXVN8ml1obq4YvymPYzOjwXPI85DhNnvfvg04yV4rZE_8cDzg`
-        return config
-    },
-    (error) => {
-      return Promise.reject(error)
-    }
-  )
+  // axios.interceptors.request.use(
+  //   (config) => {
+  //     config.headers.authorization = `Bearer ${token}`
+  //     /*eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiYjQzZmE3MGI5NzRmYmNhNmU3ZDU3MTMzMWY4ZDdiZDBjYTRlOGJjOTU0Y2NmYTU1YzlmNDIyZjA5OWFhMDYwYWVjY2U2ZWM2NWQ4YjcwM2MiLCJpYXQiOjE2MTY5NDQ2MTEsIm5iZiI6MTYxNjk0NDYxMSwiZXhwIjoxNjE3MDMxMDExLCJzdWIiOiIxIiwic2NvcGVzIjpbIioiXX0.pbvC1Duv080ZGkcMGoffz65Xjv7khVJ0wodqyOWegHahGBlQ19JFSe7xn-G5Y0UqSzpfgQHoqamZ8qqwwePFij1mgvoJhKYzCqqEKHXxuUDYn8wl_hF52d0swmPqE61s2fWDUYweYiuDTlQqQVW20Y-1-pA8BHW3cxvjAiQYUcmppi17x_1oGuwxdcumFtsQJiId7ThH6NWp6AKHRH8u-rv6GKQjXwSiy0uFhmZ6KzU4oojztA-DslZmAGOHbMAsRtB4SJby1PsYAF0SJLEwFOnTaLQbWfkbMRxXOXkQ0NPzzg1k4WhNifDT7qmhYVbL4LlyouWA_qGZoasYKeSFlhZNZXBNc9btHSgAPTJ6RVu8CKhEI2ibM4BWyY_mm-_GmX-CyrMQdWlGZQOrgponVteHRw2n1CJA6ab1qj3E083nTisVVjjiYImCptmTYImYSK0JE6soXJNa4FMWHqLjR3twEixOHOU1L4X0AizKIjG3ZMQn0K2W2hxjoNC5MvUuwi3T1mFIV1Ysd-npeBmDI_H5IMLpuj387uqcUEV2MBRZ46XD6WlZqPXCjACTZbjoGCJFiQHjkARQbpGbvRprgvpGVVSJwGhvUlji5p4zKnVyJc3bVdI_pjRLiJkucB9i40Xg1cigUYgvxCE96WguA7yEP-L_sX-ztN9fXlx0cZw`*/
+  //       return config
+  //   },
+  //   (error) => {
+  //     return Promise.reject(error)
+  //   }
+  // )
+
+  
  
   const handleGetPaymentDetails = (e) => {
     e.preventDefault()
     setLoading(true)
- 
+    setAuthorizationToken(localStorage.token)
     return axios
       .get(`payment_histories`, { id:id })
       .then((res) => {
-        // console.log(res.data.data.data)
-        const entries = Object.values(res.data.data.data)
+        const results = res.data['data']['data']
+        // console.log(results[0]);
+        // const head = Object.keys(results[0])
+        const entries = Object.values(results)
+        // console.log(entries);
         setData(entries)
-        console.log(entries);
+        // const columns = []
+
+         
+        // head.forEach(h => {
+        //   columns.push({
+        //     [h] : h
+        //   })
+        // })
+        // console.log(columns);
+        // setColumns(columns)
+        // const header = (entries) => {
+        //   entries.map((entry, i)=> {
+        //       // console.log(entry);
+        //   });
+        // }
+        // header(head)
+        // console.log(entries);
       })
       .catch((err) => {
         notify(err.message)
@@ -45,6 +71,55 @@ const GetPaymentHistory = () => {
         setLoading(false)
       })
   }
+
+ const renderTableHeader = () => {
+   let header = Object.keys(data[0])
+   return header.map((key, index) => {
+     return <th key={index}>{key.toUpperCase()}</th>
+   })
+ }
+
+ const renderTableData = () => {
+   return data.map((data, index) => {
+     const {
+       id, cust_Reference, is_Reversal, amount, payment_reference, payment_date, payment_method, customer_name, bank_name, is_credited, payment_log_id, deposit_slip_number, amount_applied, isAllocated, created_at, updated_at, deleted_at
+     } = data //destructuring
+     return (
+       <tr key={id}>
+         <td>{id}</td>
+         <td>{cust_Reference}</td>
+         <td>{is_Reversal}</td>
+         <td>{amount}</td>
+         <td>{payment_reference}</td>
+         <td>{payment_date}</td>
+         <td>{payment_method}</td>
+         <td>{customer_name}</td>
+         <td>{bank_name}</td>
+         <td>{is_credited}</td>
+         <td>{payment_log_id}</td>
+         <td>{deposit_slip_number}</td>
+         <td>{customer_name}</td>
+         <td>{amount_applied}</td>
+         <td>{isAllocated}</td>
+         <td>{created_at}</td>
+         <td>{updated_at} </td>
+         <td> {deleted_at}</td>
+
+         <td>
+           {' '}
+           <Link to={`/edit/${ id }`} type='submit'>
+             edit
+           </Link>
+         </td>
+         <td>
+           <Link to={`/delete/${id }`} type='submit'>
+             Delete
+           </Link>
+         </td>
+       </tr>
+     )
+   })
+ }
 
   // const displayData = {
   //   if(data) {
@@ -69,24 +144,17 @@ const GetPaymentHistory = () => {
         </button>
       </form>
       {data ? (
-        <table>
-          <thead>
-            {data.map((row, i) => {
-            return Object.keys(row).map((td) => <th key={i}>{td}</th>)
-            })}
-          </thead>
+        <table id='students'>
           <tbody>
-              <tr>
-            {data.map((row, id) => {
-              return Object.entries(row).map((td) => <td key={id}>{td[1]}</td>)
-            })}
-          </tr>
+            <tr>{renderTableHeader()}</tr>
+            {renderTableData()}
           </tbody>
-        
         </table>
-      ) : ""}
+      ) : (
+        ''
+      )}
     </div>
   )
 }
-
+{/* <ReactTable data={data} columns={columns} /> */}
 export default GetPaymentHistory

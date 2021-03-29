@@ -1,20 +1,21 @@
 
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
-const Header = () => {
+const Header = ({handleLogout}) => {
+  
     return (
       <ul className='Header'>
-        <li>
-          <Link className='Link' to='/'>
-            Home
+        {/* <li>
+          <Link className='Link' to='/logout'>
+            Log Out
           </Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link className='Link' to='/get'>
             Get Payment Details
           </Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link className='Link' to='/edit'>
             Edit Payment Details
           </Link>
@@ -23,11 +24,14 @@ const Header = () => {
           <Link className='Link' to='/delete'>
             Delete Payment Details
           </Link>
-        </li>
+        </li> */}
         <li>
-          <Link className='Link' to='/logout'>
+          {/* <Link className='Link' to='/logout'>
             Log Out
-          </Link>
+          </Link> */}
+          <button className='Link' onClick={handleLogout }>
+            Log Out
+          </button>
         </li>
       </ul>
     )
