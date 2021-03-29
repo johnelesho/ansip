@@ -156,5 +156,5 @@ const GetPaymentHistory = () => {
     </div>
   )
 }
-{/* <ReactTable data={data} columns={columns} /> */}
+
 export default GetPaymentHistory
